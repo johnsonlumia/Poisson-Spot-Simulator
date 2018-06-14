@@ -1,0 +1,115 @@
+% Project Description
+
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{physics}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{listings}
+
+\begin{document}
+
+\begin{center}
+    \textbf{\Large Poisson's Spot Simulator}
+\end{center}
+
+\textbf{Group Members:}
+
+\qquad Zhexing Zhang
+
+\qquad Renjie Zhu
+
+\section{Installing Required Packages}
+
+The python modules required to run this program are,
+\begin{itemize}
+    \item \href{http://www.numpy.org/}{numpy}
+    \item \href{https://matplotlib.org/}{matplotlib}
+    \item \href{https://pypi.org/project/PyQt5/}{PyQt5}.
+\end{itemize}
+
+All three modules should have already been installed on the 
+Raspberry Pi configured for PHYS 129L, but for use on 
+other systems (including Windows 10, macOS and full-fledged
+Linux), please run the following commands in the corresponding
+command line tools.
+
+{\fontfamily{lmtt}\selectfont 
+\begin{lstlisting}
+    pip3 install numpy
+    pip3 install matplotlib
+    pip3 install pyqt5
+\end{lstlisting}
+}
+
+Due to the ARM architecture of the processor of Raspberry 
+Pi 3 Model B, the above commands may not work and user 
+should look for other solutions if any modules above are 
+not installed. 
+
+\section{External Hardwares}
+
+There are no external hardwares needed for this program to
+function.
+
+\section{Program Description}
+
+The program we wrote is meant to simulate Poisson Spot using Huygens–Fresnel principle. 
+
+According to the principle, each point on the light path can be seen as a secondary point light source, so I used every grid point outside the disk to be a light source with same phase. The intensity of a point on the screen will be the superposition of all these points. The phase shifts of the points will cause interference phenomenon on the screen, and finally lead to the appearance of Poisson Spot.
+
+The phase shifts of the light sources are caused by the difference of the distance between the sources and the point on the screen. Following this idea, I calculated the distance between each light source and the point as a matrix, and then used the matrix to calculate the phases of the lights using exponential expression ($e^{i\theta}$, where $\theta = \frac{2 \pi l}{\lambda}$). The absolute value of the sum of the phases is the intensity on that point. 
+
+Because the Poisson Spot is a radial symmetric plot of the interference of light outside the disk, I calculated the intensity of light at different distance to the origin, instead of calculating the intensity for each point on the x-y plane. Next, I used the function of intensity in terms of radius to adjust the intensity in terms of x and y, so that I can save time for repeated calculation on points of same radius. To accomplish this method, after calculating the intensity of one radius, the program will change the intensity value of points inside the radius and repeat the process for each radius from the largest radius to 0. 
+
+Then plot it and we get the final plot showing Poisson Spot.
+
+A faster way suggested by Professor Lipman is using the complement light method. This method states that the intensity of a hole with same radius of the disk is complement to the intensity of the disk. If we add the intensity of them, we will get a constant light intensity on the screen. This is a promising method to speed up the program, but when we wrote the program for the complement light method, we found out that the constant intensity on the screen is a complex number with unknown phase, which ruined the plausibility of the method. 
+
+\section{Results}
+
+To run this program, go to the project directory and run
+the following command:
+{\fontfamily{lmtt}\selectfont 
+\begin{lstlisting}
+    $project_directory$ main.py
+\end{lstlisting}
+}
+
+You will be greeted with an introduction of the program 
+when you start (fig. \ref{fig:greet}). Press 
+OK to go to the input interface (fig. \ref{fig:input}).
+A suggestion is shown on this page, but you can change 
+these parameters as long as they meet the requirements
+of poisson spot interference pattern. The program will
+take about 10 minutes on a Raspberry Pi 3 Model B to run
+and show the image. After the image is shown, 
+the image will be saved as an eps
+file with parameters in the filename to avoid duplication.
+
+After the first image is shown, you can change the parameters
+and compute another interference pattern using outher 
+parameters. Followed are some example images created by
+this program.
+
+
+
+\section{Credits}
+
+This program is divided into two main parts: GUI 
+and algorithm. Renjie Zhu is responsible mainly for the 
+GUI part and other user interactive parts. Zhexing Zhang 
+is responsible for implementing the algorithm that 
+generates a grid of resulting intensity from the diffraction.
+However, extensive collaboration is the key during the
+process of writing this program and is the reason this 
+program works as described.
+
+We want to thank Jiahao for testing the program 
+and giving feedback about the user experience. We also
+want to thank Prof. Lipman for the insight and help on the 
+problems we were trying to solve.
+
+\end{document}
